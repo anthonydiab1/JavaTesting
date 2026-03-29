@@ -2,6 +2,10 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import javax.sql.DataSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,15 +14,18 @@ class StudentRegistryTest{
     StudentRegistry sRegistry;
     @BeforeEach
     void initializeStudentRegistry(){
+
         sRegistry= new StudentRegistry();
     }
-    @Test
+
+    @ParameterizedTest
     @DisplayName("Newly added student to student map should appear inside the map")
-    void addValidStudentTest(){
-        sRegistry.addStudent(1,"Anthony Diab");
+    @ValueSource(strings = {"Anthony Diab","Elie Helou","Jean Antoun"})
+    void addValidStudentTest(String name){
+        sRegistry.addStudent(1,name);
         assertEquals(1,sRegistry.getStudentCount());
         assertTrue(sRegistry.isStudentPresent(1));
-        assertEquals("Anthony Diab",sRegistry.getStudentById(1));
+        assertEquals(name,sRegistry.getStudentById(1));
     }
     @Test
     @DisplayName("Added Student with an Already existant id should throw IllegalArgumentException ")
